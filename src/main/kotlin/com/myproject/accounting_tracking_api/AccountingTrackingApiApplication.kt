@@ -1,12 +1,13 @@
 package com.myproject.accounting_tracking_api
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
+@EnableJpaAuditing
 @SpringBootApplication
 class AccountingTrackingApiApplication {
 
@@ -15,7 +16,7 @@ class AccountingTrackingApiApplication {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**")
-                    .allowedOrigins("http://localhost:5173")
+                    .allowedOrigins("http://localhost:5173", "http://117.52.84.99")
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowedHeaders("*")
                     .allowCredentials(true)

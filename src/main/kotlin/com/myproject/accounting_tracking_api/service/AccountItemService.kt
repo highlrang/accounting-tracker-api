@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class AccountItemService(private val accountItemRepository: AccountItemRepository) {
@@ -77,7 +78,9 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
             itemDate = request.itemDate,
             companyName = request.companyName,
             amount = request.amount,
-            isPaid = request.isPaid
+            isPaid = request.isPaid,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
         )
         val savedAccountItem = accountItemRepository.save(accountItem)
         return savedAccountItem.toResponse()
@@ -92,6 +95,7 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
         accountItem.companyName = request.companyName
         accountItem.amount = request.amount
         accountItem.isPaid = request.isPaid
+        accountItem.updatedAt = LocalDateTime.now()
 
         val updatedAccountItem = accountItemRepository.save(accountItem)
         return updatedAccountItem.toResponse()
