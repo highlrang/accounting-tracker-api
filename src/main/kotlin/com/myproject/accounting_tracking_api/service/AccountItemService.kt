@@ -47,8 +47,22 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
                     predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("itemDate"), LocalDate.parse(it)))
                 }
             }
-            searchRequest.companyName?.let {
-                predicates.add(criteriaBuilder.like(root.get("companyName"), "%$it%"))
+            searchRequest.keyword?.let {
+                if (it.isNotEmpty()) {
+                    val keywordPredicate = criteriaBuilder.or(
+                        criteriaBuilder.like(root.get("origin"), "%$it%"),
+                        criteriaBuilder.like(root.get("destination"), "%$it%")
+                    )
+
+                    it.toDoubleOrNull()?.let { amount ->
+                        predicates.add(
+                            criteriaBuilder.or(
+                                keywordPredicate,
+                                criteriaBuilder.equal(root.get<Double>("amount"), amount)
+                            )
+                        )
+                    } ?: predicates.add(keywordPredicate)
+                }
             }
             searchRequest.isPaid?.let {
                 predicates.add(criteriaBuilder.equal(root.get<Boolean>("isPaid"), it))
@@ -66,7 +80,8 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
         return AccountItemResponse(
             id = this.id!!,
             itemDate = this.itemDate,
-            companyName = this.companyName,
+            origin = this.origin,
+            destination = this.destination,
             amount = this.amount,
             isPaid = this.isPaid,
             isDeleted = this.isDeleted
@@ -76,7 +91,8 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
     fun createAccountItem(request: AccountItemRequest): AccountItemResponse {
         val accountItem = AccountItem(
             itemDate = request.itemDate,
-            companyName = request.companyName,
+            origin = request.origin,
+            destination = request.destination,
             amount = request.amount,
             isPaid = request.isPaid,
             createdAt = LocalDateTime.now(),
@@ -92,7 +108,8 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
         }
 
         accountItem.itemDate = request.itemDate
-        accountItem.companyName = request.companyName
+        accountItem.origin = request.origin
+        accountItem.destination = request.destination
         accountItem.amount = request.amount
         accountItem.isPaid = request.isPaid
         accountItem.updatedAt = LocalDateTime.now()

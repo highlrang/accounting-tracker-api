@@ -14,7 +14,8 @@ class AccountItem(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     var itemDate: LocalDate,
-    var companyName: String,
+    var origin: String,
+    var destination: String,
     var amount: Double,
     var isPaid: Boolean,
     var isDeleted: Boolean = false,
