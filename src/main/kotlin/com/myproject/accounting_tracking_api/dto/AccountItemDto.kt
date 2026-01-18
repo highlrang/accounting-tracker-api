@@ -7,7 +7,8 @@ data class AccountItemRequest(
     val origin: String,
     val destination: String,
     val amount: Double,
-    val isPaid: Boolean
+    val isPaid: Boolean,
+    val notes: String?
 )
 
 data class AccountItemResponse(
@@ -17,6 +18,7 @@ data class AccountItemResponse(
     val destination: String,
     val amount: Double,
     val isPaid: Boolean,
+    val notes: String?,
     val isDeleted: Boolean
 )
 

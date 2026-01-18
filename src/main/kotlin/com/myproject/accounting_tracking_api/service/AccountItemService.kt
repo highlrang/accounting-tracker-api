@@ -51,7 +51,8 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
                 if (it.isNotEmpty()) {
                     val keywordPredicate = criteriaBuilder.or(
                         criteriaBuilder.like(root.get("origin"), "%$it%"),
-                        criteriaBuilder.like(root.get("destination"), "%$it%")
+                        criteriaBuilder.like(root.get("destination"), "%$it%"),
+                        criteriaBuilder.like(root.get("notes"), "%$it%")
                     )
 
                     it.toDoubleOrNull()?.let { amount ->
@@ -84,6 +85,7 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
             destination = this.destination,
             amount = this.amount,
             isPaid = this.isPaid,
+            notes = this.notes,
             isDeleted = this.isDeleted
         )
     }
@@ -95,6 +97,7 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
             destination = request.destination,
             amount = request.amount,
             isPaid = request.isPaid,
+            notes = request.notes,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         )
@@ -112,6 +115,7 @@ class AccountItemService(private val accountItemRepository: AccountItemRepositor
         accountItem.destination = request.destination
         accountItem.amount = request.amount
         accountItem.isPaid = request.isPaid
+        accountItem.notes = request.notes
         accountItem.updatedAt = LocalDateTime.now()
 
         val updatedAccountItem = accountItemRepository.save(accountItem)

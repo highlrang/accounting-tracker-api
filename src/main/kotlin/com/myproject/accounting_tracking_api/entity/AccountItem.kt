@@ -18,6 +18,7 @@ class AccountItem(
     var destination: String,
     var amount: Double,
     var isPaid: Boolean,
+    var notes: String?,
     var isDeleted: Boolean = false,
     @CreatedDate
     var createdAt: LocalDateTime,
